@@ -5,7 +5,7 @@ import { connect } from 'umi';
 
 const Item = List.Item;
 
-export const BasicForm = ({ dispatch, match, form }: any) => {
+export const BasicForm = ({ dispatch, location, form }: any) => {
   const { getFieldProps, getFieldError } = form;
 
   // verify and submit form data
@@ -13,7 +13,10 @@ export const BasicForm = ({ dispatch, match, form }: any) => {
     form.validateFields({ force: true }, (error: any) => {
       if (!error) {
         const formData = form.getFieldsValue();
-        dispatch({ type: 'demo/postForm', payload: formData });
+        dispatch({
+          type: 'demo/postForm',
+          payload: { ...formData, id: location.query?.id },
+        });
       } else {
         Toast.fail('表单验证失败', 1);
       }
@@ -28,14 +31,14 @@ export const BasicForm = ({ dispatch, match, form }: any) => {
     <form>
       <List
         renderHeader={() => '基础信息填写'}
-        renderFooter={() => getFieldError('account') && getFieldError('account').join(',')}
+        renderFooter={() =>
+          getFieldError('account') && getFieldError('account').join(',')
+        }
       >
         <InputItem
           {...getFieldProps('name', {
             initialValue: 'little ant',
-            rules: [
-              { required: true, message: '请输入姓名' },
-            ],
+            rules: [{ required: true, message: '请输入姓名' }],
           })}
           clear
           error={!!getFieldError('name')}
@@ -43,14 +46,14 @@ export const BasicForm = ({ dispatch, match, form }: any) => {
             Toast.fail(getFieldError('name').join('、'), 1);
           }}
           placeholder="请输入姓名"
-        >姓名</InputItem>
+        >
+          姓名
+        </InputItem>
 
         <InputItem
           {...getFieldProps('age', {
             initialValue: 'little ant',
-            rules: [
-              { required: true, message: '请输入年龄' },
-            ],
+            rules: [{ required: true, message: '请输入年龄' }],
           })}
           clear
           error={!!getFieldError('age')}
@@ -58,14 +61,14 @@ export const BasicForm = ({ dispatch, match, form }: any) => {
             Toast.fail(getFieldError('age').join('、'), 1);
           }}
           placeholder="请输入年龄"
-        >年龄</InputItem>
+        >
+          年龄
+        </InputItem>
 
         <InputItem
           {...getFieldProps('address', {
             initialValue: 'little ant',
-            rules: [
-              { required: true, message: '请输入地址' },
-            ],
+            rules: [{ required: true, message: '请输入地址' }],
           })}
           clear
           error={!!getFieldError('address')}
@@ -73,14 +76,14 @@ export const BasicForm = ({ dispatch, match, form }: any) => {
             Toast.fail(getFieldError('address').join('、'), 1);
           }}
           placeholder="请输入地址"
-        >地址</InputItem>
+        >
+          地址
+        </InputItem>
 
         <InputItem
           {...getFieldProps('phone', {
             initialValue: 'little ant',
-            rules: [
-              { required: true, message: '请输入电话' },
-            ],
+            rules: [{ required: true, message: '请输入电话' }],
           })}
           clear
           error={!!getFieldError('phone')}
@@ -88,10 +91,21 @@ export const BasicForm = ({ dispatch, match, form }: any) => {
             Toast.fail(getFieldError('phone').join('、'), 1);
           }}
           placeholder="请输入电话"
-        >电话</InputItem>
+        >
+          电话
+        </InputItem>
         <Item>
-          <Button type="primary" size="small" inline onClick={onSubmit}>提交</Button>
-          <Button size="small" inline style={{ marginLeft: '2.5px' }} onClick={onReset}>重置</Button>
+          <Button type="primary" size="small" inline onClick={onSubmit}>
+            提交
+          </Button>
+          <Button
+            size="small"
+            inline
+            style={{ marginLeft: '2.5px' }}
+            onClick={onReset}
+          >
+            重置
+          </Button>
         </Item>
       </List>
     </form>
